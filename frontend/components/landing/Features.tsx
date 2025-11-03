@@ -63,7 +63,7 @@ const Features = () => {
             return (
               <div
                 key={index}
-                className='group bg-card/10 border border-border rounded-2xl p-6 sm:p-8 hover:border-border/40 hover:bg-card/20 transition-all duration-300 hover:shadow-xl'
+                className='group bg-primary/5 border border-border rounded-2xl p-6 sm:p-8 hover:border-border/40 hover:bg-primary/10 transition-all duration-300 hover:shadow-xl'
               >
                 {/* Icon */}
                   <div className={`w-12 h-12 sm:w-14 sm:h-14 bg-accent/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-accent/30 transition-all`}>

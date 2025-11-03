@@ -35,13 +35,12 @@ export default function SuperAdminLoginPage() {
       <div className="w-full max-w-md">
         {/* Logo/Title */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">👑</h1>
           <h2 className="text-3xl font-bold text-foreground">Apna Parivar</h2>
           <p className="text-muted-foreground mt-2">SuperAdmin Login</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-card rounded-2xl shadow-2xl p-8">
+        <div className="bg-primary/5 rounded-2xl shadow-2xl p-8 border border-primary/10">
           {/* Welcome Message */}
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-card-foreground">System Management</h3>
@@ -121,13 +120,13 @@ export default function SuperAdminLoginPage() {
           {/* Additional Info */}
           <div className="space-y-3 text-sm text-muted-foreground">
             <p>
-              👨‍💼 Are you a Family Admin?{' '}
+              Are you a Family Admin?{' '}
               <Link href="/admin-login" className="text-foreground font-semibold hover:opacity-70">
                 Login here
               </Link>
             </p>
             <p>
-              👥 Are you a Family Member?{' '}
+              Are you a Family Member?{' '}
               <Link href="/member-login" className="text-foreground font-semibold hover:opacity-70">
                 Login here
               </Link>
