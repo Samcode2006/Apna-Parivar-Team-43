@@ -12,6 +12,8 @@ class UserResponse(UserBase):
     id: str
     family_id: Optional[str]
     role: str
+    approval_status: Optional[str] = "approved"
+    full_name: Optional[str] = None
     created_at: str
     updated_at: str
 
@@ -65,5 +67,43 @@ class LoginRequest(BaseModel):
 
 class AuthResponse(BaseModel):
     access_token: str
+    refresh_token: Optional[str] = None
     token_type: str
     user: UserResponse
+
+# SuperAdmin Login
+class SuperAdminLoginRequest(BaseModel):
+    """SuperAdmin login with hardcoded credentials"""
+    username: str
+    password: str
+
+# Family Admin Signup/Onboarding
+class AdminOnboardingRequest(BaseModel):
+    """Family admin signup request - awaits SuperAdmin approval"""
+    email: EmailStr
+    full_name: str
+    family_name: str
+    password: str
+    confirm_password: str
+
+class AdminOnboardingResponse(BaseModel):
+    """Response for admin onboarding request"""
+    request_id: str
+    status: str  # pending, approved, rejected
+    message: str
+    family_password: Optional[str] = None  # Only shown on creation
+    rejection_reason: Optional[str] = None
+
+# Family Member Login
+class FamilyMemberLoginRequest(BaseModel):
+    """Family member login with email + family name + family password"""
+    email: EmailStr
+    family_name: str
+    family_password: str
+
+class AdminApprovalRequest(BaseModel):
+    """SuperAdmin action to approve/reject admin request"""
+    request_id: str
+    action: str  # approve or reject
+    admin_password: Optional[str] = None  # Required for approve
+    rejection_reason: Optional[str] = None  # Required for reject

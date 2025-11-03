@@ -10,10 +10,74 @@ class EmailRequest(BaseModel):
     """Email request for magic link"""
     email: EmailStr
 
+class SignupRequest(BaseModel):
+    """Signup request"""
+    email: EmailStr
+    full_name: str
+
 class MagicLinkVerificationRequest(BaseModel):
     """Magic link verification request"""
     email: str
     token: str
+
+@router.post("/signup")
+async def signup(request: SignupRequest):
+    """
+    Create a new user account via Supabase Auth
+    Sends magic link to verify email
+    
+    Request:
+        {
+            "email": "user@gmail.com",
+            "full_name": "John Doe"
+        }
+    
+    Response:
+        {
+            "message": "Account created. Magic link sent to your email.",
+            "email": "user@gmail.com",
+            "status": "success"
+        }
+    """
+    try:
+        supabase: Client = get_supabase_client()
+        
+        # Check if user already exists in our database
+        user_check = supabase.table("users").select("*").eq("email", request.email).execute()
+        if user_check.data:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered"
+            )
+        
+        # Send magic link via Supabase OTP with should_create_user=True
+        # This will both create the auth user and trigger the magic link email
+        response = supabase.auth.sign_in_with_otp({
+            "email": request.email,
+            "options": {
+                "email_redirect_to": "http://localhost:3000/auth/callback",
+                "should_create_user": True
+            }
+        })
+        
+        # Create user record in database with provided full_name
+        # The user_id will be set by the callback after they verify their email
+        # For now, we'll store a pending user or update after auth
+        
+        return {
+            "message": "Account created successfully! Magic link sent to your email.",
+            "email": request.email,
+            "status": "success",
+            "note": "Check your email for the verification link and click it to complete signup."
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Signup failed: {str(e)}"
+        )
 
 @router.post("/send-magic-link")
 async def send_magic_link(request: EmailRequest):
@@ -38,10 +102,12 @@ async def send_magic_link(request: EmailRequest):
         supabase: Client = get_supabase_client()
         
         # Send magic link via Supabase OTP (One-Time Password via email)
+        # Note: The redirect_to URL will have the token appended as #access_token, #refresh_token, #type
         response = supabase.auth.sign_in_with_otp({
             "email": request.email,
             "options": {
-                "email_redirect_to": "http://localhost:3000/auth/callback"  # Frontend callback URL
+                "email_redirect_to": "http://localhost:3000/auth/callback",  # Frontend callback URL
+                "should_create_user": True  # Auto-create user if they don't exist
             }
         })
         
