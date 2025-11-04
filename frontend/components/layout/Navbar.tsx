@@ -30,12 +30,22 @@ const Navbar = () => {
     if (href.startsWith('#')) {
       e.preventDefault()
       const id = href.slice(1)
-      const el = document.getElementById(id)
-      if (el) {
-        const y = el.getBoundingClientRect().top + window.pageYOffset - 64
-        window.scrollTo({ top: y, behavior: 'smooth' })
-        setActiveId(id)
+      
+      if (window.location.pathname === '/') {
+        // On home page, just scroll to the section
+        const el = document.getElementById(id)
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.pageYOffset - 64
+          window.scrollTo({ top: y, behavior: 'smooth' })
+          window.history.pushState({}, '', href) // Update URL with hash
+          setActiveId(id)
+        }
+      } else {
+        // Not on home page, navigate to home with hash
+        // The hash will be handled by the home page's useEffect
+        router.push(`/${href}`)
       }
+      
       setIsOpen(false)
     }
   }
@@ -49,6 +59,7 @@ const Navbar = () => {
     try {
       const stored = localStorage.getItem('theme')
       if (stored === 'shadcn') {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTheme('shadcn')
         document.documentElement.classList.remove('dark')
         document.documentElement.classList.add('shadcn')
@@ -138,7 +149,9 @@ const Navbar = () => {
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`flex items-center space-x-2 px-3 py-1 rounded-md transition-all duration-200 group ${
-                    isActive ? 'text-foreground font-semibold bg-white/6 border border-white/20' : 'text-muted-foreground hover:text-foreground hover:bg-white/2'
+                    isActive 
+                      ? 'text-foreground font-semibold dark:bg-white/6 bg-gray-100 border border-border dark:border-white/20' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-gray-50 dark:hover:bg-white/2'
                   }`}
                 >
                   <Icon size={18} className={`transition-colors ${isActive ? 'text-foreground' : 'group-hover:text-foreground'}`} />
@@ -169,16 +182,22 @@ const Navbar = () => {
                     user?.role === 'family_admin' ? '/admin/dashboard' :
                     '/families'
                   }
-                  className='hidden sm:inline-flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105 font-semibold bg-blue-600 text-white hover:bg-blue-700'
+                  className={`hidden sm:inline-flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105 font-semibold ${
+                    theme === 'dark' 
+                      ? 'bg-white text-[#010104] hover:shadow-lg hover:shadow-white/30'
+                      : 'bg-[#010104] text-white hover:shadow-lg hover:shadow-black/30'
+                  }`}
                 >
                   <LayoutDashboard size={18} />
                   <span>Dashboard</span>
                 </Link>
 
-                <div className='hidden sm:flex items-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800'>
+                <div className={`hidden sm:flex items-center space-x-2 px-3 py-2 rounded-lg ${
+                    theme === 'dark' ? 'bg-gray-800' : 'bg-[#010104]'
+                  }`}>
                   <div className='flex flex-col items-end text-sm'>
-                    <span className='font-medium text-gray-900 dark:text-white'>{user?.email}</span>
-                    <span className='text-xs text-gray-600 dark:text-gray-400 capitalize'>{user?.role?.replace(/_/g, ' ')}</span>
+                    <span className='font-medium text-white'>{user?.email}</span>
+                    <span className='text-xs text-gray-400 capitalize'>{user?.role?.replace(/_/g, ' ')}</span>
                   </div>
                 </div>
 
@@ -231,14 +250,20 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <>
-                <div className='px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg'>
-                  <div className='text-sm font-medium text-gray-900 dark:text-white'>{user?.email}</div>
-                  <div className='text-xs text-gray-600 dark:text-gray-400 capitalize'>{user?.role?.replace(/_/g, ' ')}</div>
+                <div className={`px-4 py-3 rounded-lg ${
+                    theme === 'dark' ? 'bg-gray-800' : 'bg-[#010104]'
+                  }`}>
+                  <div className='text-sm font-medium text-white'>{user?.email}</div>
+                  <div className='text-xs text-gray-400 capitalize'>{user?.role?.replace(/_/g, ' ')}</div>
                 </div>
 
                 <Link
                   href="/dashboard"
-                  className='flex items-center space-x-3 px-4 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all'
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all hover:scale-105 ${
+                    theme === 'dark'
+                      ? 'bg-white text-[#010104] hover:shadow-lg hover:shadow-white/30'
+                      : 'bg-[#010104] text-white hover:shadow-lg hover:shadow-black/30'
+                  }`}
                   onClick={() => setIsOpen(false)}
                 >
                   <LayoutDashboard size={18} />

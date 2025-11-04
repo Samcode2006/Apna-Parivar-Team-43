@@ -18,6 +18,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Apna Parivar",
   description: "Keep your family connected",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/logo.png', sizes: '180x180', type: 'image/png' }
+    ]
+  }
 };
 
 export default function RootLayout({
