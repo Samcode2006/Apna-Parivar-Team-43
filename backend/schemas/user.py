@@ -85,6 +85,7 @@ class AdminOnboardingRequest(BaseModel):
     family_name: str
     password: str
     confirm_password: str
+    family_password: str  # Family password that members will use to login
 
 class AdminOnboardingResponse(BaseModel):
     """Response for admin onboarding request"""

@@ -23,6 +23,7 @@ export interface Family {
 }
 
 export interface FamilyMember {
+  email: ReactNode;
   id: string;
   family_id: string;
   name: string;
@@ -48,6 +49,7 @@ export interface AdminOnboardingRequest {
   family_name: string;
   password: string;
   confirm_password: string;
+  family_password: string;
 }
 
 export interface AdminOnboardingResponse {

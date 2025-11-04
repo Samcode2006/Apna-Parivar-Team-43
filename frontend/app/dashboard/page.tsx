@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context-new';
 import { ProtectedRoute } from '@/lib/protected-route';
 import Link from 'next/link';
@@ -12,8 +13,24 @@ interface DashboardStats {
 }
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { user, isAuthenticated, isLoading } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({});
+
+  useEffect(() => {
+    // Redirect based on role
+    if (!isLoading && isAuthenticated && user) {
+      if (user.role === 'super_admin') {
+        router.replace('/admin');
+      } else if (user.role === 'family_admin' || user.role === 'family_co_admin') {
+        router.replace('/admin/dashboard');
+      } else if (user.role === 'family_user') {
+        router.replace('/families');
+      }
+    } else if (!isLoading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [user, isAuthenticated, isLoading, router]);
 
   useEffect(() => {
     // Stats will be fetched based on role

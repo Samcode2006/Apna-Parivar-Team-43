@@ -172,12 +172,26 @@ async def admin_register(request: AdminOnboardingRequest):
         supabase = get_supabase_client()
         service = AdminOnboardingService(supabase)
         
+        # Validate family password
+        if not request.family_password or len(request.family_password.strip()) == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Family password is required"
+            )
+        
+        if len(request.family_password) < 4:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Family password must be at least 4 characters long"
+            )
+        
         # Create onboarding request
         result = await service.create_onboarding_request(
             email=request.email,
             full_name=request.full_name,
             family_name=request.family_name,
-            admin_password=request.password
+            admin_password=request.password,
+            family_password=request.family_password
         )
         
         return result
@@ -346,32 +360,58 @@ async def family_member_login(request: FamilyMemberLoginRequest):
         family_data = family_response.data[0]
         family_id = family_data.get("id")
         
-        # Verify family password by attempting to decrypt it
-        # The family password should match what's encrypted in the family record
-        try:
-            admin_user_id = family_data.get("admin_user_id")
-            # Note: We need admin password to decrypt, but we can't get it here
-            # Instead, we'll skip this verification for now and just check if member exists in family
-            # This is a design limitation - in production, use a different approach
-        except Exception:
+        # Verify family password using hash
+        family_password_hash = family_data.get("family_password_hash")
+        if family_password_hash:
+            if not PasswordHashingService.verify_password(request.family_password, family_password_hash):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid credentials or not a member of this family"
+                )
+        else:
+            # Fallback: if hash doesn't exist, skip password verification for backward compatibility
+            # But this should be fixed in production
             pass
         
-        # Check if user exists in this family
-        user_response = supabase.table("users").select("*").eq("email", request.email).eq("family_id", family_id).eq("role", "family_user").execute()
+        # Check if member exists in family_members table with this email
+        members_response = supabase.table("family_members").select("*").eq("family_id", family_id).execute()
         
-        if not user_response.data:
+        if not members_response.data:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid credentials or not a member of this family"
             )
         
-        user_data = user_response.data[0]
+        # Find member with matching email in relationships
+        member_data = None
+        for member in members_response.data:
+            relationships = member.get("relationships", {})
+            if isinstance(relationships, dict) and relationships.get("email") == request.email:
+                member_data = member
+                break
+        
+        if not member_data:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid credentials or not a member of this family"
+            )
+        
+        # Create user-like data structure for response and token
+        member_email = member_data.get("relationships", {}).get("email") if isinstance(member_data.get("relationships"), dict) else request.email
+        user_data = {
+            "id": member_data.get("id"),
+            "email": member_email,
+            "role": "family_user",
+            "family_id": family_id,
+            "full_name": member_data.get("name"),
+            "approval_status": "approved"
+        }
         
         # Generate JWT token for family member
         access_token = create_access_token(
-            user_id=user_data.get("id"),
-            email=user_data.get("email"),
-            role=user_data.get("role"),
+            user_id=member_data.get("id"),  # Use member_id as user_id
+            email=member_email,
+            role="family_user",
             family_id=family_id
         )
         

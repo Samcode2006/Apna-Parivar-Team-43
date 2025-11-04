@@ -39,7 +39,7 @@ export default function FamilyDetailPage() {
   };
 
   return (
-    <ProtectedRoute requiredRole={['super_admin', 'family_admin', 'family_co_admin', 'family_user']}>
+    <ProtectedRoute requiredRole={['family_admin', 'family_co_admin', 'family_user']}>
       <div className="min-h-screen bg-background py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}

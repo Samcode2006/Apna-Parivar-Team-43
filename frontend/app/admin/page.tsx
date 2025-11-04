@@ -107,28 +107,30 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
+      {/* Header - use landing-like container/padding and larger title to match theme */}
       <div className="bg-card border-b border-border shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-card-foreground">SuperAdmin Dashboard</h1>
-              <p className="text-muted-foreground mt-1">Manage family admin onboarding requests</p>
+              <h1 className="text-4xl sm:text-5xl font-bold text-foreground">SuperAdmin Dashboard</h1>
+              <p className="text-muted-foreground mt-2">Manage family admin onboarding requests</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:opacity-90 transition"
-            >
-              Logout
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:opacity-90 transition"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Statistics */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card rounded-lg shadow p-6 border border-border">
             <div className="text-sm text-muted-foreground font-medium">Total Requests</div>
             <div className="text-3xl font-bold text-card-foreground">{stats.total}</div>
@@ -196,7 +198,12 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 text-sm text-card-foreground">{request.full_name}</td>
                       <td className="px-6 py-4 text-sm text-card-foreground">{request.family_name}</td>
                       <td className="px-6 py-4 text-sm text-muted-foreground">
-                        {new Date(request.requested_at).toLocaleDateString()}
+                        {request.requested_at
+                          ? (() => {
+                              const d = new Date(request.requested_at);
+                              return isNaN(d.getTime()) ? '—' : d.toLocaleDateString();
+                            })()
+                          : '—'}
                       </td>
                       <td className="px-6 py-4 text-sm">
                         <span

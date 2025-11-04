@@ -164,7 +164,11 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 <Link
-                  href="/dashboard"
+                  href={
+                    user?.role === 'super_admin' ? '/admin' :
+                    user?.role === 'family_admin' ? '/admin/dashboard' :
+                    '/families'
+                  }
                   className='hidden sm:inline-flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105 font-semibold bg-blue-600 text-white hover:bg-blue-700'
                 >
                   <LayoutDashboard size={18} />

@@ -20,7 +20,8 @@ interface AuthContextType {
     fullName: string,
     familyName: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
+    familyPassword: string
   ) => Promise<AdminOnboardingResponse>;
   adminLogin: (email: string, password: string) => Promise<void>;
   checkAdminStatus: (requestId: string) => Promise<AdminOnboardingResponse>;
@@ -93,7 +94,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fullName: string,
     familyName: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
+    familyPassword: string
   ): Promise<AdminOnboardingResponse> => {
     try {
       return await authService.adminRegister({
@@ -102,6 +104,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         family_name: familyName,
         password,
         confirm_password: confirmPassword,
+        family_password: familyPassword,
       });
     } catch (error) {
       throw error;

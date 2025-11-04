@@ -4,14 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context-new';
 import Link from 'next/link';
-
-interface FamilyMember {
-  id: string;
-  name: string;
-  email: string;
-  relationship: string;
-  added_at: string;
-}
+import { getFamily, getFamilyMembers, createFamilyMember, deleteFamilyMember } from '@/lib/family-service';
+import { FamilyMember } from '@/lib/types';
 
 interface FamilyDetails {
   id: string;
@@ -47,29 +41,39 @@ export default function AdminDashboardPage() {
 
     // Fetch family details
     fetchFamilyDetails();
-  }, [isAuthenticated, user, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, user?.role, user?.family_id]);
 
   const fetchFamilyDetails = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('auth_token');
-      if (!token) {
-        throw new Error('No authentication token found');
+      if (!user?.family_id) {
+        throw new Error('No family ID found');
       }
 
-      // In a real app, you'd fetch this from your API
-      // For now, we'll use mock data based on the auth context
-      const mockFamilyDetails: FamilyDetails = {
-        id: user?.family_id || 'unknown',
-        name: user?.family_id ? 'Your Family' : 'Family',
+      // Fetch family details from API
+      const family = await getFamily(user.family_id);
+      
+      // Fetch family members from API
+      const members = await getFamilyMembers(user.family_id);
+
+      const familyDetails: FamilyDetails = {
+        id: family.id,
+        name: family.family_name,
         admin_email: user?.email || '',
         admin_name: user?.full_name || 'Admin',
-        created_at: new Date().toISOString(),
-        member_count: 0,
-        members: [],
+        created_at: family.created_at,
+        member_count: members.length,
+        members: members.map(m => ({
+          id: m.id,
+          name: m.name,
+          email: m.relationships?.email || '', // Email might be in relationships
+          relationship: m.relationships?.relationship || m.relationships?.type || 'member',
+          added_at: m.created_at,
+        })),
       };
 
-      setFamilyDetails(mockFamilyDetails);
+      setFamilyDetails(familyDetails);
       setError('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load family details');
@@ -87,35 +91,35 @@ export default function AdminDashboardPage() {
       setError('Please enter member name');
       return;
     }
-    if (!newMember.email.trim()) {
-      setError('Please enter member email');
-      return;
-    }
     if (!newMember.relationship.trim()) {
       setError('Please select a relationship');
       return;
     }
 
+    if (!user?.family_id) {
+      setError('No family ID found');
+      return;
+    }
+
     try {
       setAddMemberLoading(true);
-      // TODO: Call API to add family member
-      // For now, just add locally
-      const member: FamilyMember = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: newMember.name,
-        email: newMember.email,
+      
+      // Call API to add family member
+      const relationships: Record<string, string> = {
         relationship: newMember.relationship,
-        added_at: new Date().toISOString(),
+        ...(newMember.email ? { email: newMember.email } : {}),
       };
 
-      setFamilyDetails((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          members: [...(prev.members || []), member],
-          member_count: (prev.members?.length || 0) + 1,
-        };
-      });
+      const createdMember = await createFamilyMember(
+        user.family_id,
+        newMember.name,
+        undefined, // photo_url
+        relationships,
+        {} // custom_fields
+      );
+
+      // Refresh family details to get updated members list
+      await fetchFamilyDetails();
 
       setNewMember({ name: '', email: '', relationship: '' });
       setShowAddMember(false);
@@ -126,16 +130,22 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleRemoveMember = (memberId: string) => {
-    if (confirm('Are you sure you want to remove this member?')) {
-      setFamilyDetails((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          members: prev.members?.filter((m) => m.id !== memberId) || [],
-          member_count: (prev.members?.length || 1) - 1,
-        };
-      });
+  const handleRemoveMember = async (memberId: string) => {
+    if (!confirm('Are you sure you want to remove this member?')) {
+      return;
+    }
+
+    if (!user?.family_id) {
+      setError('No family ID found');
+      return;
+    }
+
+    try {
+      await deleteFamilyMember(user.family_id, memberId);
+      // Refresh family details to get updated members list
+      await fetchFamilyDetails();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to remove member');
     }
   };
 

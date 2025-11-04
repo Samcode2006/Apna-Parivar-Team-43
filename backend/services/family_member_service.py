@@ -11,6 +11,7 @@ class FamilyMemberService:
                                    relationships: dict = {}, custom_fields: dict = {}) -> dict:
         """Create a new family member"""
         try:
+            # Create family member record
             data = {
                 "family_id": family_id,
                 "name": name,
@@ -19,7 +20,12 @@ class FamilyMemberService:
                 "custom_fields": custom_fields
             }
             response = self.supabase.table("family_members").insert(data).execute()
-            return response.data[0] if response.data else None
+            member = response.data[0] if response.data else None
+            
+            if not member:
+                raise Exception("Failed to create family member")
+            
+            return member
         except Exception as e:
             raise Exception(f"Error creating family member: {str(e)}")
     

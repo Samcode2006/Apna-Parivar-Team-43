@@ -24,7 +24,7 @@ export default function SuperAdminLoginPage() {
 
     try {
       await superAdminLogin(username, password);
-      router.push('/admin');
+      router.replace('/admin');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     }

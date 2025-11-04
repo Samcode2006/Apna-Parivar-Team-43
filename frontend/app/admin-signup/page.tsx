@@ -14,13 +14,14 @@ export default function AdminSignupPage() {
     family_name: '',
     password: '',
     confirm_password: '',
+    family_password: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [requestId, setRequestId] = useState('');
-  const [familyPassword, setFamilyPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showFamilyPassword, setShowFamilyPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,7 +30,7 @@ export default function AdminSignupPage() {
   };
 
   const validateForm = () => {
-    if (!formData.email || !formData.full_name || !formData.family_name || !formData.password || !formData.confirm_password) {
+    if (!formData.email || !formData.full_name || !formData.family_name || !formData.password || !formData.confirm_password || !formData.family_password) {
       setError('All fields are required');
       return false;
     }
@@ -41,6 +42,11 @@ export default function AdminSignupPage() {
 
     if (formData.password !== formData.confirm_password) {
       setError('Passwords do not match');
+      return false;
+    }
+
+    if (formData.family_password.length < 4) {
+      setError('Family password must be at least 4 characters long');
       return false;
     }
 
@@ -64,17 +70,18 @@ export default function AdminSignupPage() {
         formData.full_name,
         formData.family_name,
         formData.password,
-        formData.confirm_password
+        formData.confirm_password,
+        formData.family_password
       );
       setSuccess(true);
       setRequestId(response.request_id);
-      setFamilyPassword(response.family_password || '');
       setFormData({
         email: '',
         full_name: '',
         family_name: '',
         password: '',
         confirm_password: '',
+        family_password: '',
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
@@ -115,23 +122,6 @@ export default function AdminSignupPage() {
                 </button>
               </div>
 
-              {/* Family Password */}
-              <div className="mb-6 p-4 bg-accent/10 border border-accent/30 rounded-lg">
-                <p className="text-xs text-accent font-semibold uppercase tracking-wide mb-1">Family Password (Save this!)</p>
-                <p className="text-lg font-mono text-accent break-all">{familyPassword}</p>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(familyPassword);
-                    alert('Family password copied!');
-                  }}
-                  className="mt-2 text-xs text-accent hover:opacity-70 font-semibold underline"
-                >
-                  Copy to clipboard
-                </button>
-                <p className="text-xs text-accent/80 mt-3">
-                  <strong>⚠️ Important:</strong> Share this password with your family members to let them access the family tree.
-                </p>
-              </div>
 
               {/* Next Steps */}
               <div className="space-y-3 mb-6">
@@ -179,15 +169,15 @@ export default function AdminSignupPage() {
           {/* Content */}
           <div className="p-8">
             {error && (
-              <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
-                <p className="text-destructive text-sm font-medium">{error}</p>
+              <div className="mb-6 p-4 bg-primary/5 border border-primary/10 rounded-lg">
+                <p className="text-destructive text-sm font-medium ">{error}</p>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 ">
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-card-foreground mb-1">
+                <label htmlFor="email" className="block text-sm  font-medium text-card-foreground mb-1 ">
                   Email Address
                 </label>
                 <input
@@ -289,6 +279,33 @@ export default function AdminSignupPage() {
                 </div>
               </div>
 
+              {/* Family Password */}
+              <div>
+                <label htmlFor="family_password" className="block text-sm font-medium text-card-foreground mb-1">
+                  Family Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="family_password"
+                    type={showFamilyPassword ? 'text' : 'password'}
+                    name="family_password"
+                    value={formData.family_password}
+                    onChange={handleChange}
+                    placeholder="Password for family members to login (min 4 characters)"
+                    className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent outline-none transition bg-background text-foreground"
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowFamilyPassword(!showFamilyPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground text-sm"
+                  >
+                    {showFamilyPassword ? '👁️' : '👁️‍🗨️'}
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">This password will be shared with family members for login</p>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
@@ -313,7 +330,7 @@ export default function AdminSignupPage() {
               </p>
               <ul className="list-disc list-inside space-y-1">
                 <li>Your request will be pending SuperAdmin approval</li>
-                <li>You'll receive your family password automatically</li>
+                <li>Remember your family password - share it with family members</li>
                 <li>Once approved, you can login and manage your family</li>
               </ul>
             </div>
