@@ -85,7 +85,7 @@ export default function AdminSignupPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="w-full max-w-md">
-          <div className="bg-card rounded-lg shadow-xl overflow-hidden">
+          <div className="bg-card dark:bg-[#000000] rounded-lg shadow-xl dark:shadow-2xl dark:shadow-white/5 overflow-hidden dark:border dark:border-gray-800">
             {/* Success Header */}
             <div className="bg-primary px-6 py-8">
               <h1 className="text-2xl font-bold text-primary-foreground">✓ Registration Submitted</h1>
@@ -169,7 +169,7 @@ export default function AdminSignupPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
-        <div className="bg-card rounded-lg shadow-xl overflow-hidden">
+        <div className="bg-card dark:bg-[#000000] rounded-lg shadow-xl dark:shadow-2xl dark:shadow-white/5 overflow-hidden dark:border dark:border-gray-800">
           {/* Header */}
           <div className="bg-primary px-6 py-8">
             <h1 className="text-3xl font-bold text-primary-foreground">Family Admin</h1>
@@ -320,7 +320,7 @@ export default function AdminSignupPage() {
           </div>
 
           {/* Footer Links */}
-          <div className="bg-background/50 px-8 py-4 border-t border-border">
+          <div className="bg-card dark:bg-[#000000] px-8 py-4 border-t border-border/50 dark:border-border/30 rounded-b-lg">
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{' '}
               <Link href="/admin-login" className="text-primary hover:opacity-70 font-medium">

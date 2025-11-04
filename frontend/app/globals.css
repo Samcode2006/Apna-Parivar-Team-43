@@ -117,10 +117,10 @@
   --background: #ffffff;
   --foreground: #0f172a; /* slate-900 */
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #0d1833;
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #2563eb; /* blue-600 */
+  --popover-foreground: #0d1833;
+  --primary: #101728;
   --primary-foreground: #ffffff;
   --secondary: #f8fafc;
   --secondary-foreground: #0f172a;
@@ -131,7 +131,7 @@
   --destructive: #ef4444;
   --border: rgba(15,23,42,0.06);
   --input: rgba(15,23,42,0.06);
-  --ring: rgba(37,99,235,0.2);
+  --ring: rgba(16,23,40,0.2);
   --chart-1: #f97316;
   --chart-2: #60a5fa;
   --chart-3: #a78bfa;
@@ -144,7 +144,32 @@
   --sidebar-accent: #eef2ff;
   --sidebar-accent-foreground: #0f172a;
   --sidebar-border: rgba(15,23,42,0.06);
-  --sidebar-ring: rgba(37,99,235,0.12);
+  --sidebar-ring: rgba(16,23,40,0.12);
+}
+
+/* Hide emojis in light theme */
+.shadcn .emoji-hide {
+  display: none !important;
+}
+
+/* Hide emoji characters in text for light theme */
+.shadcn h1,
+.shadcn button,
+.shadcn p {
+  font-feature-settings: normal;
+}
+
+/* Super Admin title section background in light theme */
+.shadcn .superadmin-title-bg {
+  background-color: #101728;
+}
+
+.shadcn .superadmin-title-text {
+  color: #ffffff;
+}
+
+.shadcn .superadmin-subtitle-text {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 @layer base {

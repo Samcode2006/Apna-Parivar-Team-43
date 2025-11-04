@@ -34,13 +34,13 @@ export default function SuperAdminLoginPage() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         {/* Logo/Title */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-foreground">Apna Parivar</h2>
-          <p className="text-muted-foreground mt-2">SuperAdmin Login</p>
+        <div className="text-center mb-8 rounded-lg py-6 px-4 superadmin-title-bg">
+          <h2 className="text-3xl font-bold text-foreground superadmin-title-text">Apna Parivar</h2>
+          <p className="text-muted-foreground mt-2 superadmin-subtitle-text">SuperAdmin Login</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-primary/5 rounded-2xl shadow-2xl p-8 border border-primary/10">
+        <div className="bg-card rounded-2xl shadow-2xl p-8">
           {/* Welcome Message */}
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-card-foreground">System Management</h3>
@@ -95,7 +95,7 @@ export default function SuperAdminLoginPage() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   disabled={isLoading}
                 >
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                  <span className="dark:inline-block emoji-hide">{showPassword ? '👁️' : '👁️‍🗨️'}</span>
                 </button>
               </div>
             </div>

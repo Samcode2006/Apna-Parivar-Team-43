@@ -28,7 +28,7 @@ export default function LoginPage() {
               <p className="text-muted-foreground text-sm mb-4 flex-1">
                 Access your family dashboard and manage members, settings, and family information
               </p>
-              <div className="flex items-center text-primary font-semibold group-hover:opacity-80 transition">
+              <div className="flex items-center text-card-foreground font-semibold group-hover:opacity-80 transition">
                 <span>Login</span>
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -52,7 +52,7 @@ export default function LoginPage() {
               <p className="text-muted-foreground text-sm mb-4 flex-1">
                 Register your family and become an admin. Create a new family tree and invite members
               </p>
-              <div className="flex items-center text-primary font-semibold group-hover:opacity-80 transition">
+              <div className="flex items-center text-card-foreground font-semibold group-hover:opacity-80 transition">
                 <span>Register</span>
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -76,7 +76,7 @@ export default function LoginPage() {
               <p className="text-muted-foreground text-sm mb-4 flex-1">
                 Login with your family credentials to view and explore your family tree
               </p>
-              <div className="flex items-center text-primary font-semibold group-hover:opacity-80 transition">
+              <div className="flex items-center text-card-foreground font-semibold group-hover:opacity-80 transition">
                 <span>Login</span>
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
