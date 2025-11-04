@@ -19,9 +19,9 @@ export default function MemberLoginPage() {
   // If already authenticated as family_user, redirect to families
   useEffect(() => {
     if (isAuthenticated && user?.role === 'family_user') {
-      router.push('/families');
+      router.replace('/families');
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user?.role]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ export default function MemberLoginPage() {
     try {
       setLoading(true);
       await familyMemberLogin(email, familyName, familyPassword);
-      router.push('/families');
+      router.replace('/families');
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Login failed';
       setError(errorMsg);

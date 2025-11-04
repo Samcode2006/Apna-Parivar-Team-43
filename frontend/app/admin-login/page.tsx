@@ -28,9 +28,9 @@ export default function AdminLoginPage() {
   // If already authenticated as family_admin, redirect to dashboard
   useEffect(() => {
     if (isAuthenticated && user?.role === 'family_admin') {
-      router.push('/admin/dashboard');
+      router.replace('/admin/dashboard');
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user?.role]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +50,8 @@ export default function AdminLoginPage() {
     try {
       setLoading(true);
       await adminLogin(email, password);
-      router.push('/admin/dashboard');
+      // Use replace to avoid keeping login page in history
+      router.replace('/admin/dashboard');
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Login failed';
       setError(errorMsg);
