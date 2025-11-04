@@ -22,15 +22,15 @@ const Hero = () => {
           {/* CTA Buttons */}
           <div className='flex flex-col sm:flex-row gap-4 pt-4'>
             <a
-              href='/auth/signup'
-              className='inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-white text-[#010104] font-semibold rounded-lg hover:shadow-lg hover:shadow-white/30 transition-all duration-300 hover:scale-105 w-full sm:w-auto'
+              href='/login'
+              className='inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition duration-200 hover:shadow-lg hover:shadow-primary/20 w-full sm:w-auto'
             >
               Get Started (Gmail only)
               <ArrowRight size={20} />
             </a>
             <a
               href='#features'
-              className='inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-[#262626] text-white font-semibold rounded-lg border border-[#262626] hover:border-white hover:bg-transparent transition-all duration-300 w-full sm:w-auto'
+              className='inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-foreground font-semibold rounded-lg border border-border hover:bg-accent/50 transition duration-200 w-full sm:w-auto'
             >
               Learn More
             </a>

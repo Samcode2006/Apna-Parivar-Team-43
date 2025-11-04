@@ -117,12 +117,12 @@ export default function AdminDashboard() {
               <h1 className="text-5xl sm:text-6xl font-bold text-foreground">SuperAdmin</h1>
               <p className="text-lg text-muted-foreground">Manage admin onboarding requests</p>
             </div>
-            <button
+            {/* <button
               onClick={handleLogout}
               className="px-6 py-3 bg-white text-[#010104] font-semibold rounded-lg hover:shadow-lg hover:shadow-white/30 transition-all duration-300 hover:scale-105 whitespace-nowrap"
             >
-              Logout
-            </button>
+              Logout */}
+            {/* </button> */}
           </div>
         </div>
       </div>

@@ -331,8 +331,11 @@ class AdminOnboardingService:
                 "family_id": family_id,
                 "name": full_name,
                 "photo_url": None,
-                "relationships": {"role": "family_admin"},
-                "custom_fields": {"email": email, "user_id": user_id}
+                "relationships": {
+                    "role": "family_admin",
+                    "email": email
+                },
+                "custom_fields": {"user_id": user_id}
             }
             
             member_response = self.supabase.table("family_members").insert(admin_member_data).execute()

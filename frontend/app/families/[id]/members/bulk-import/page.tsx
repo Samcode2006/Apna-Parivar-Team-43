@@ -325,7 +325,7 @@ export default function BulkImportPage() {
                       <button
                         type="button"
                         onClick={downloadTemplate}
-                        className="px-4 py-2.5 bg-blue-500/20 border border-blue-500/40 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-all text-sm font-medium"
+                        className="px-4 py-2.5 bg-white/10 border border-white/20 text-foreground rounded-lg hover:bg-white/20 transition-all text-sm font-medium"
                       >
                         Download Template
                       </button>
@@ -503,9 +503,9 @@ export default function BulkImportPage() {
           </div>
 
           {/* Info Box */}
-          <div className="mt-8 p-6 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-            <h3 className="text-lg font-semibold text-blue-300 mb-3">💡 Tips for Bulk Import</h3>
-            <ul className="space-y-2 text-blue-200/80 text-sm">
+          <div className="mt-8 p-6 bg-white/5 border border-white/20 rounded-xl">
+            <h3 className="text-lg font-semibold text-foreground mb-3">💡 Tips for Bulk Import</h3>
+            <ul className="space-y-2 text-muted-foreground text-sm">
               <li>✓ Add up to 100 members in a single batch</li>
               <li>✓ All 10 custom fields are predefined for consistency</li>
               <li>✓ CSV format: Name, Photo URL, Relationships, and Custom Fields</li>

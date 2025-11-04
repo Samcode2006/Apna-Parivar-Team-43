@@ -65,7 +65,7 @@ export default function FamilyDetailPage() {
                   </Link>
                   <Link
                     href={`/families/${familyId}/members/bulk-import`}
-                    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-600/30 transition-all duration-300 hover:scale-105 text-center"
+                    className="px-6 py-3 bg-[#262626] text-white font-semibold rounded-lg border border-[#262626] hover:border-white hover:bg-transparent transition-all duration-300 hover:scale-105 text-center"
                   >
                     📥 Bulk Import
                   </Link>

@@ -175,12 +175,12 @@ export default function AdminDashboardPage() {
               <h1 className="text-5xl sm:text-6xl font-bold text-foreground">Family Hub</h1>
               <p className="text-lg text-muted-foreground">Manage your family members and information</p>
             </div>
-            <button
+            {/* <button
               onClick={handleLogout}
               className="px-6 py-3 bg-white text-[#010104] font-semibold rounded-lg hover:shadow-lg hover:shadow-white/30 transition-all duration-300 hover:scale-105 whitespace-nowrap"
             >
               Logout
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -236,7 +236,7 @@ export default function AdminDashboardPage() {
                 </button>
                 <Link
                   href={`/families/${familyDetails.id}/members/bulk-import`}
-                  className="text-sm px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-600/20 transition-all duration-300 hover:scale-105"
+                  className="text-sm px-4 py-2 bg-[#262626] text-white font-semibold rounded-lg border border-[#262626] hover:border-white hover:bg-transparent transition-all duration-300 hover:scale-105"
                 >
                   Bulk Import
                 </Link>
@@ -255,7 +255,7 @@ export default function AdminDashboardPage() {
             <div className="flex gap-3">
               <Link
                 href={`/families/${familyDetails?.id}/members/bulk-import`}
-                className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-600/30 transition-all duration-300 hover:scale-105"
+                className="px-6 py-3 bg-[#262626] text-white font-semibold rounded-lg border border-[#262626] hover:border-white hover:bg-transparent transition-all duration-300 hover:scale-105"
               >
                 📥 Bulk Import
               </Link>
