@@ -491,7 +491,7 @@ See [CHANGELOG.md](docs/CHANGELOG.md) for a list of changes in each release.
 
 **Built with ❤️ by Neuratron**
 
-*Preserving family history, one tree at a time.*
+*Preserving family👨‍👩‍👧‍👦 history, one tree at a time.*
 
 Made with FastAPI, Next.js, and Supabase
 
